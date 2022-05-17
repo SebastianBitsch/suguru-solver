@@ -5,11 +5,12 @@ class Solver:
 
     def __init__(self, initial_board: Board) -> None:
         self.board = initial_board
+        self.boards = []
         self.values_tried = []
         self.recursions_deep = 0
 
 
-    def solve(self, b: Board, current: int) -> bool:
+    def solve(self, b: Board, current: int = 0) -> bool:
         self.recursions_deep += 1
         next = b.next_empty(current)
 
@@ -22,6 +23,7 @@ class Solver:
                 continue
             
             b.set_cell_value(next.cell_id, val)
+            self.boards.append(b.as_list())
             self.board = b
 
             if self.board_valid(b):
@@ -30,6 +32,7 @@ class Solver:
 
             self.values_tried.append(b.path_to(next.cell_id)+str(val))
             b.set_cell_value(next.cell_id, 0)
+            self.boards.append(b.as_list())
 
         return False
 

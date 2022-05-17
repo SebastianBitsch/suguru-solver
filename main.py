@@ -1,48 +1,67 @@
-from copy import copy, deepcopy
-from tokenize import group
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib.artist import Artist
+
+import sample_board
 from board import Board
 from solver import Solver
+from util import configure_plot
 
-BOARD_SIZE = 8
+# Used to display animation
+fps = 100
+snapshots = []
+texts = []
+
+# Read in sample data
+initial_board = sample_board.initial_board
+grouping = sample_board.grouping
+
+# Set up plot
+fig = plt.figure(figsize=(7,7))
+im = plt.imshow(grouping, interpolation='none', aspect='auto',cmap='tab20c')
 
 
-initial_board = [
-    [0,0,0,0,1,0,0,0],
-    [0,0,5,0,0,3,0,3],
-    [0,0,0,0,0,0,0,0],
-    [0,4,0,3,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [5,0,2,4,0,0,0,0]
-]
+def animate_text(i):
+    global texts
+    last_values= list(snapshots[i-1])
+    values = list(snapshots[i])
+    
+    # Clear existing text
+    for t in texts:
+        Artist.remove(t)
+    texts = []
 
-grouping = [
-    [0, 1, 1, 2, 2, 2, 3, 3], 
-    [0, 1, 1, 6, 2, 2, 4, 3], 
-    [0, 1, 6, 6, 5, 4, 4, 3], 
-    [7, 7, 6, 6, 5, 4, 4,10], 
-    [7, 7, 9, 9, 5,11,10,10], 
-    [8, 8, 9, 9, 5,11,11,10], 
-    [8, 8, 8, 9,13,11,12,12]
-]
-def main():
+    # Add new text
+    for y in range(len(values)):
+        for x in range(len(values[0])):
+            if values[y][x] == 0:
+                continue
+            
+            # Set color, purple for static, yellow for current
+            color = 'navy' if initial_board[y][x] != 0 else 'black'
+            color = 'yellow' if values[y][x] != last_values[y][x] else color
 
+            t = plt.text(x, y, values[y][x], size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
+            texts.append(t)
+    
+    return [t]
+
+def animate_solution():
+    _ = animation.FuncAnimation(fig, animate_text, frames = len(snapshots), interval = 1000 / fps, blit=True)
+    plt.show()
+
+
+if __name__ == "__main__":
     b = Board(initial_board, grouping)
     s = Solver(b)
 
-    # print(s.board.values_to(8))
+    s.solve(b)
 
-    print(b)
-    s.solve(b,0)
+    # Solved board
     print(s.board)
-    
-    
-    # plt.imshow(grouping)
-    # plt.show()
 
-if __name__ == "__main__":
-    main()
-
-
+    # Animate solution
+    snapshots = s.boards
+    configure_plot(s.board.w, s.board.h)
+    animate_solution()
 

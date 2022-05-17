@@ -11,10 +11,11 @@ class Board:
 
         self.cells = []
 
-        # Initialize the cells
+        # Initialize cells
         for y in range(self.h):
             for x in range(self.w):
-                self.cells.append(Cell(len(self.cells), grouping[y][x], board[y][x], board[y][x] != 0))
+                c = Cell(cell_id=len(self.cells), group_id=grouping[y][x], value=board[y][x])
+                self.cells.append(c)
 
 
     def next_empty(self, i) -> Cell or None:
@@ -30,6 +31,8 @@ class Board:
         cell_values = [c.value for g, c in zip(self.grouping, self.cells) if g == group_id]
         return sum(cell_values) == sum(set(cell_values))
         
+    
+    # TODO: Not the neatest way of checking
     def neighbours_valid(self, cell_id: int) -> bool:
         x, y = self.coords_from_id(cell_id)
         
@@ -79,3 +82,12 @@ class Board:
 
     def coords_from_id(self, id:int) -> tuple[int,int]:
         return (id % self.w, id // (self.h+1))
+
+
+    def as_list(self) -> list:
+        vals = [x.value for x in self.cells]
+        vals_2d = []
+        for i in range(self.w, self.h*self.w + self.w, self.w):
+            vals_2d.append(vals[i-self.w:i])
+
+        return vals_2d
