@@ -5,9 +5,13 @@ class Board:
     def __init__(self, board, grouping) -> None:
         self.w = len(board[0])
         self.h = len(board)
+
         self.grouping = util.flat_list(grouping)
+        self.num_groups = len(set(self.grouping))
+
         self.cells = []
 
+        # Initialize the cells
         for y in range(self.h):
             for x in range(self.w):
                 self.cells.append(Cell(len(self.cells), grouping[y][x], board[y][x], board[y][x] != 0))
@@ -27,7 +31,7 @@ class Board:
         return sum(cell_values) == sum(set(cell_values))
         
     def neighbours_valid(self, cell_id: int) -> bool:
-        x, y = self.coords_form_id(cell_id)
+        x, y = self.coords_from_id(cell_id)
         
         # Dont bother with checking empty cells
         if self.cells[cell_id].empty():
@@ -60,8 +64,12 @@ class Board:
             lines += f"{line}\n"
         return lines
     
-    def values_to(self, cell_id: int) -> str:
+    def path_to(self, cell_id: int) -> str:
         return "".join([str(self.cells[x].value) for x in range(cell_id+1)])
+
+    def num_cells_in_group(self, id: int) -> int:
+        return self.grouping.count(id)
+
 
     def set_cell_value(self, cell_id: int, new_val: int) -> None:
         self.cells[cell_id].value = new_val
@@ -69,5 +77,5 @@ class Board:
     def id_from_coords(self, x: int, y:int) -> int:
         return y*self.w + x
 
-    def coords_form_id(self, id:int) -> tuple[int,int]:
+    def coords_from_id(self, id:int) -> tuple[int,int]:
         return (id % self.w, id // (self.h+1))

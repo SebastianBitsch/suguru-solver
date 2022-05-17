@@ -29,13 +29,12 @@ grouping = [
 def main():
 
     b = Board(initial_board, grouping)
-    s = Solver(b, grouping)
+    s = Solver(b)
 
     # print(s.board.values_to(8))
 
     print(b)
-    a = s.solve(deepcopy(b),0)
-    print("after")
+    s.solve(b,0)
     print(s.board)
     
     

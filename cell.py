@@ -24,7 +24,6 @@ class Cell:
     group_id: int
     value: int = 0
     static: bool = False
-    # values_tried: list[int] = field(default_factory=list)
 
     def empty(self) -> bool:
         return self.value == 0
