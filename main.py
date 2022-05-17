@@ -1,3 +1,4 @@
+from copy import copy, deepcopy
 from tokenize import group
 import matplotlib.pyplot as plt
 from board import Board
@@ -26,11 +27,18 @@ grouping = [
     [8, 8, 8, 9,13,11,12,12]
 ]
 def main():
+
     b = Board(initial_board, grouping)
     s = Solver(b, grouping)
 
-    print(s.board_valid(b))
+    # print(s.board.values_to(8))
 
+    print(b)
+    a = s.solve(deepcopy(b),0)
+    print("after")
+    print(s.board)
+    
+    
     # plt.imshow(grouping)
     # plt.show()
 
