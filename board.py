@@ -48,7 +48,7 @@ class Board:
         x, y = self.coords_from_id(cell_id)
         
         # Dont bother with checking empty cells
-        if self.cells[cell_id].empty():
+        if not self.cells[cell_id].value:#if self.cells[cell_id].empty():
             return True
 
         # Look down
