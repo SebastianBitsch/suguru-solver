@@ -61,7 +61,7 @@ class MarchingSquares(object):
 
 
 
-    def plot_edges(self, edge_color:str = 'black', fig_size:tuple = (7,7)) -> None:
+    def plot_edges(self, fig, ax, edge_color:str = 'black', fig_size:tuple = (7,7)) -> None:
         """ Plot the outer edges of the resulting marching squares sequence """
                 
         for y in range(self.h):
@@ -85,7 +85,8 @@ class MarchingSquares(object):
                     y1 += 0.5 if y1 == self.h+0.5 else 0
                     y2 += 0.5 if y2 == self.h+0.5 else 0
                     
-                    plt.plot([x1, x2],[y1, y2], color=edge_color, zorder=1)
+                    ax.plot([x1, x2],[y1, y2], color=edge_color,linewidth=2)
+        return fig,ax
         # plt.show()
 
 
