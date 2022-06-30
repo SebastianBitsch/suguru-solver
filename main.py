@@ -99,16 +99,16 @@ if __name__ == "__main__":
     plt.show()
 
     #draw_board((8,7))
-    # b = Board(initial_board, grouping)
-    # s = Solver(b)
+    b = Board(initial_board, grouping)
+    s = Solver(b)
 
-    # s.solve(b)
+    s.solve(b)
 
     # # Solved board
     # print(s.board)
 
     # # Animate solution
-    # snapshots = s.boards
-    # configure_plot(s.board.w, s.board.h)
-    # animate_solution()
+    snapshots = s.boards
+    configure_plot(s.board.w, s.board.h)
+    animate_solution()
 
