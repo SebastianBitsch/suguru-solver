@@ -70,26 +70,34 @@ class Solver:
         return groups_valid and neighbours_valid
 
 
-    def plot_solution(self, figsize:tuple = (3,3)):
+    def plot_solution(self, figsize:tuple = (7,7)):
+        """ Plot the board and the solution found """
         fig, ax = self.__configure_plot(figsize)
 
         self.__draw_grouping(fig, ax)
-        self.animate_solution(len(self.boards)-1)
+        self.__draw_board_values(len(self.boards)-1)
 
         plt.show()
         
 
-    def animate_solution(self):
-        fig, ax = self.__configure_plot()
-        pass
+    def animate_solution(self, figsize:tuple = (7,7), fps: int = 100):
+        """ Animate the process of finding the solution to the board """
+        fig, ax = self.__configure_plot(figsize)
 
-    def animate_text(self, i):
+        self.__draw_grouping(fig, ax)
+        _ = animation.FuncAnimation(fig, self.__draw_board_values, frames = len(self.boards), interval = 1000 / fps, blit=True)
+
+        plt.show()
+
+
+    def __draw_board_values(self, i:int):
         
         values = list(self.boards[i])
         
         # Clear existing text
         for t in self.text_fields:
             Artist.remove(t)
+        self.text_fields = []
 
         # Add new text
         for y in range(len(values)):
@@ -98,7 +106,7 @@ class Solver:
                     continue
                 
                 # Set color, purple for static
-                color = 'darkorchid' if self.initial_board[y][x] != 0 else 'black'
+                color = 'darkorchid' if self.boards[0][y][x] != 0 else 'black'
 
                 t = plt.text(x+0.5, len(values)-y-1+0.5, values[y][x], size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
                 self.text_fields.append(t)
@@ -108,7 +116,15 @@ class Solver:
         return [t]
 
 
-    def __configure_plot(self, figsize:tuple = (3,3)):
+    def __draw_grouping(self, fig: plt.Figure, ax: plt.Axes):
+        """ Draw the grouping i.e. the clumps of numbers, using Marching Squares to determinte the bounds"""
+        for i in range(self.board.num_groups):
+            ms = MarchingSquares(self.board.grouping, lower_threshold=i, upper_threshold=i)
+            ms.plot_edges(fig, ax)
+
+
+    def __configure_plot(self, figsize:tuple = (7,7)):
+        """ Helper function to do basic setup of the plot """
         fig, ax = plt.subplots(figsize=figsize)
         ax.grid(True, color='lightgrey', linestyle='-', linewidth=1, zorder=0)
 
@@ -120,9 +136,3 @@ class Solver:
         ax.tick_params(axis='y', colors=(0,0,0,0))
 
         return fig, ax
-
-
-    def __draw_grouping(self, fig, ax):
-            for i in range(self.board.num_groups):
-                ms = MarchingSquares(self.board.grouping, lower_threshold=i, upper_threshold=i)
-                ms.plot_edges(fig, ax)
