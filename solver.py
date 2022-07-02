@@ -1,4 +1,10 @@
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib.artist import Artist
+
+from MarchingSquares import MarchingSquares
 from board import Board
+
 
 class Solver:
 
@@ -7,8 +13,12 @@ class Solver:
         self.board = initial_board
         self.values_tried = []
         
-        # Only used for animating the solution later
+
+        # Only used for animating the solution later, 
+        # the first board is the initial board, the last is the solution
         self.boards = []
+
+        self.text_fields = []
     
 
     # TODO: Add clarification to user when puzzle has no solution
@@ -58,3 +68,61 @@ class Solver:
         neighbours_valid = all([b.neighbours_valid(id) for id in range(b.w*b.h)])
 
         return groups_valid and neighbours_valid
+
+
+    def plot_solution(self, figsize:tuple = (3,3)):
+        fig, ax = self.__configure_plot(figsize)
+
+        self.__draw_grouping(fig, ax)
+        self.animate_solution(len(self.boards)-1)
+
+        plt.show()
+        
+
+    def animate_solution(self):
+        fig, ax = self.__configure_plot()
+        pass
+
+    def animate_text(self, i):
+        
+        values = list(self.boards[i])
+        
+        # Clear existing text
+        for t in self.text_fields:
+            Artist.remove(t)
+
+        # Add new text
+        for y in range(len(values)):
+            for x in range(len(values[0])):
+                if values[y][x] == 0:
+                    continue
+                
+                # Set color, purple for static
+                color = 'darkorchid' if self.initial_board[y][x] != 0 else 'black'
+
+                t = plt.text(x+0.5, len(values)-y-1+0.5, values[y][x], size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
+                self.text_fields.append(t)
+        
+        # Hacky way of making sure plt actually renderes the last digit, no idea how it works but it does
+        t = plt.text(-2,-2, 0, size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
+        return [t]
+
+
+    def __configure_plot(self, figsize:tuple = (3,3)):
+        fig, ax = plt.subplots(figsize=figsize)
+        ax.grid(True, color='lightgrey', linestyle='-', linewidth=1, zorder=0)
+
+        ax.set_xlim((0,self.board.w))
+        ax.set_ylim((0,self.board.h))
+
+        # Hide ticks
+        ax.tick_params(axis='x', colors=(0,0,0,0))
+        ax.tick_params(axis='y', colors=(0,0,0,0))
+
+        return fig, ax
+
+
+    def __draw_grouping(self, fig, ax):
+            for i in range(self.board.num_groups):
+                ms = MarchingSquares(self.board.grouping, lower_threshold=i, upper_threshold=i)
+                ms.plot_edges(fig, ax)

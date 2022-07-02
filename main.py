@@ -9,7 +9,7 @@ from solver import Solver
 from util import configure_plot
 
 # Used to display animation
-fps = 100
+fps = 250
 snapshots = []
 texts = []
 
@@ -51,7 +51,6 @@ def draw_board(board_size:tuple):
 
 def animate_text(i):
     global texts
-    last_values = list(snapshots[i-1])
     values = list(snapshots[i])
     
     # Clear existing text
@@ -65,16 +64,14 @@ def animate_text(i):
             if values[y][x] == 0:
                 continue
             
-            # Set color, purple for static, yellow for current
+            # Set color, purple for static
             color = 'darkorchid' if initial_board[y][x] != 0 else 'black'
-            color = 'dodgerblue' if values[y][x] != last_values[y][x] else color
-            
 
             t = plt.text(x+0.5, len(values)-y-1+0.5, values[y][x], size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
             texts.append(t)
     
     # Hacky way of making sure plt actually renderes the last digit, no idea how it works but it does
-    t = plt.text(0,0, 0, size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
+    t = plt.text(-2,-2, 0, size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
     return [t]
 
 
@@ -84,6 +81,8 @@ def animate_solution(fig):
 
 
 import matplotlib.pyplot as plt
+
+
 if __name__ == "__main__":
 
     
@@ -91,7 +90,7 @@ if __name__ == "__main__":
     num_groups = len({x for l in grouping for x in l})
 
 
-    fig, ax = plt.subplots(figsize=(7,7))
+    fig, ax = plt.subplots(figsize=(3,3))
 
     ax.grid(True, color='lightgrey', linestyle='-', linewidth=1, zorder=0)
 
@@ -115,11 +114,17 @@ if __name__ == "__main__":
 
     s.solve(b)
 
-    # # # Solved board
-    # # print(s.board)
+    s.plot_solution()
 
-    # # # Animate solution
+    quit()
+    # Solved board
+    print(s.board)
+
+    # Animate solution
     snapshots = s.boards
+    # animate_text(len(s.boards)-1)
+    # plt.show()
+    # plt.show()
     # configure_plot(s.board.w, s.board.h)
     animate_solution(fig)
 

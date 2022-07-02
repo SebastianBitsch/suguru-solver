@@ -6,8 +6,9 @@ class Board:
         self.w = len(board[0])
         self.h = len(board)
 
-        self.grouping = util.flat_list(grouping)
-        self.num_groups = len(set(self.grouping))
+        self.grouping = grouping
+        self.flat_grouping = util.flat_list(grouping)
+        self.num_groups = len(set(self.flat_grouping))
 
         self.cells = []
 
@@ -35,7 +36,7 @@ class Board:
         Checks if the group with a given group_id violates the rules, which means it returns true
         if any number appears more than once in the group (excluding 0)
         """
-        cell_values = [c.value for g, c in zip(self.grouping, self.cells) if g == group_id]
+        cell_values = [c.value for g, c in zip(self.flat_grouping, self.cells) if g == group_id]
         return sum(cell_values) == sum(set(cell_values))
         
     
@@ -92,7 +93,7 @@ class Board:
         """
         Returns the number of cells that belong to a group with a given id
         """
-        return self.grouping.count(id)
+        return self.flat_grouping.count(id)
 
     def set_cell_value(self, cell_id: int, new_val: int) -> None:
         self.cells[cell_id].value = new_val
