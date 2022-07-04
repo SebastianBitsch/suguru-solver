@@ -8,15 +8,13 @@ from solver import Solver
 if __name__ == "__main__":
 
     # Read in sample data
-    #initial_board, grouping = sample_board.sample1
-    initial_board, grouping = sample_board.sample2
+    initial_board, grouping = sample_board.sample3
 
     b = Board(initial_board, grouping)
     s = Solver(b)
 
     s.solve(b)
-
-    s.plot_solution()
-    print("here")
-    #s.animate_solution(fps=400)
+    print(f"Solved the puzzle in {len(s.boards)} steps")
+    #s.plot_solution()
+    s.animate_solution(fps=150)
     
