@@ -16,7 +16,7 @@ class Solver:
 
         # Only used for animating the solution later, 
         # the first board is the initial board, the last is the solution
-        self.boards = []
+        self.boards = [initial_board.as_list()]
 
         self.text_fields = []
     
