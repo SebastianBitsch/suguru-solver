@@ -15,9 +15,7 @@ The aim of Suguru is to fill each n-sized region with the numbers 1-n. For examp
 Each number can't be next to the same number in an adjacent cell, this includes horizontally, vertically, and diagonally.
 
 ## Animation
-Animation of the algorithm solving a 7 x 8 suguru puzzle, the animation is created with matplotlib.  
+Animation of the algorithm solving a 6 x 6 suguru puzzle, the animation is created with matplotlib.  
 Areas of different colors represent regions that must include unique numbers as described above.
 
-![animation](https://user-images.githubusercontent.com/72623007/168904030-c02b6384-bfc0-41e2-a3d3-0fccbb781166.gif)
-
-
+![suguru-kopi](https://user-images.githubusercontent.com/72623007/177201961-0ce5f9ef-90f4-46a2-b63e-8fc8a4fc9e6a.gif)
