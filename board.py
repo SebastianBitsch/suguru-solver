@@ -53,19 +53,19 @@ class Board:
             return True
 
         # Look down
-        if y != (self.h-1) and self.cells[cell_id].value == self.cells[cell_id+self.w].value:
+        if y < self.h-2 and self.cells[cell_id].value == self.cells[cell_id+self.w].value:
             return False
         
         # Look right
-        if x != (self.w-1) and self.cells[cell_id].value == self.cells[cell_id+1].value:
+        if x < self.w-2 and self.cells[cell_id].value == self.cells[cell_id+1].value:
             return False
         
         # Look down right diagonal
-        if x != (self.w-1) and y != (self.h-1) and self.cells[cell_id].value == self.cells[cell_id+1+self.w].value:
+        if x < self.w-2 and y < self.h-2 and self.cells[cell_id].value == self.cells[cell_id+1+self.w].value:
             return False
         
         # Look down left diagonal
-        if x != 0 and y != (self.h-1) and self.cells[cell_id].value == self.cells[cell_id-1+self.w].value:
+        if 0 < x and y < self.h-2 and self.cells[cell_id].value == self.cells[cell_id-1+self.w].value:
             return False
         
         return True
