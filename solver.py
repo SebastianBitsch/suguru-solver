@@ -85,7 +85,7 @@ class Solver:
         fig, ax = self.__configure_plot(figsize)
 
         self.__draw_grouping(fig, ax)
-        _ = animation.FuncAnimation(fig, self.__draw_board_values, frames = len(self.boards), interval = 1000 / fps, blit=True)
+        _ = animation.FuncAnimation(fig, self.__draw_board_values, frames = len(self.boards), interval = 1000 / fps, repeat=False)
 
         plt.show()
 
@@ -106,14 +106,16 @@ class Solver:
                     continue
                 
                 # Set color, purple for static
-                color = 'darkorchid' if self.boards[0][y][x] != 0 else 'black'
+                color = 'limegreen' if self.boards[i][y][x] == self.boards[-1][y][x] else 'black'
+                color = 'darkorchid' if self.boards[0][y][x] != 0 else color
+                
 
                 t = plt.text(x+0.5, len(values)-y-1+0.5, values[y][x], size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
                 self.text_fields.append(t)
         
         # Hacky way of making sure plt actually renderes the last digit, no idea how it works but it does
-        t = plt.text(-2,-2, 0, size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
-        return [t]
+        # t = plt.text(-2,-2, 0, size=20, horizontalalignment='center', verticalalignment='center', fontweight="black", color=color)
+        # return [t]
 
 
     def __draw_grouping(self, fig: plt.Figure, ax: plt.Axes):

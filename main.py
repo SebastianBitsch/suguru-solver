@@ -15,6 +15,7 @@ if __name__ == "__main__":
 
     s.solve(b)
     print(f"Solved the puzzle in {len(s.boards)} steps")
-    #s.plot_solution()
-    s.animate_solution(fps=150)
+    
+    s.animate_solution(fps=250)
+    s.plot_solution()
     
